@@ -611,8 +611,9 @@ class SelScrape(SearchEngineScrape, threading.Thread):
                     except TimeoutException:
                         self.quit()
                         raise SeleniumSearchError('Stop Scraping, seems we are blocked')
-            except Exception:
+            except Exception as e:
                 logger.error('Scrape Exception pass. Selector: ' + str(selector))
+                logger.error(e)
                 self._save_debug_screenshot()
                 pass
 
@@ -720,6 +721,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
             # Click the next page link not when leaving the loop
             # in the next iteration.
             if self.page_number + 1 in self.pages_per_keyword:
+                logger.info('Requesting the next page')
                 next_url = self._goto_next_page()
                 self.requested_at = datetime.datetime.utcnow()
 
