@@ -601,6 +601,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
                     )
                 )
             except TimeoutException:
+                logger.error('Timed out!')
                 self._save_debug_screenshot()
                 try:
                     self.webdriver.find_element_by_css_selector(selector).text
