@@ -613,7 +613,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
                         raise SeleniumSearchError('Stop Scraping, seems we are blocked')
             except Exception as e:
                 logger.error('Scrape Exception pass. Selector: ' + str(selector))
-                logger.error(e)
+                logger.error('Got this error: ' + str(e))
                 self._save_debug_screenshot()
                 pass
 
