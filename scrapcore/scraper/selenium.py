@@ -591,27 +591,16 @@ class SelScrape(SearchEngineScrape, threading.Thread):
             elif self.search_engine_name == 'ask':
                 selector = '#paging .pgcsel .pg'
 
-            # content = None
             try:
-                time.sleep(1)
-                WebDriverWait(self.webdriver, 5).until(
-                    EC.text_to_be_present_in_element(
-                        (By.CSS_SELECTOR, selector),
-                        str(self.page_number)
-                    )
-                )
-            except TimeoutException:
-                logger.error('Timed out!')
+                WebDriverWait(self.webdriver, 5).until(EC.visibility_of_element_located(selector))
+            except NoSuchElementException:
+                logger.error('No such element. Seeing if title matches before raising SeleniumSearchError')
                 self._save_debug_screenshot()
                 try:
-                    self.webdriver.find_element_by_css_selector(selector).text
-                except NoSuchElementException:
-                    try:
-                        logger.error('No such element. Seeing if title matches before raising SeleniumSearchError')
-                        self.wait_until_title_contains_keyword()
-                    except TimeoutException:
-                        self.quit()
-                        raise SeleniumSearchError('Stop Scraping, seems we are blocked')
+                    self.wait_until_title_contains_keyword()
+                except TimeoutException:
+                    self.quit()
+                    raise SeleniumSearchError('Stop Scraping, seems we are blocked')
             except Exception as e:
                 logger.error('Scrape Exception pass. Selector: ' + str(selector))
                 logger.error('Got this error: ' + str(e))
