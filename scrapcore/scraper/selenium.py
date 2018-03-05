@@ -576,7 +576,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
         if self.search_type == 'normal':
 
             if self.search_engine_name == 'google':
-                selector = '#navcnt td.cur'
+                selector = '#resultStats'
             elif self.search_engine_name == 'yandex':
                 selector = '.pager__item_current_yes font font'
             elif self.search_engine_name == 'bing':
