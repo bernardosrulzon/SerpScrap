@@ -603,12 +603,9 @@ class SelScrape(SearchEngineScrape, threading.Thread):
                     raise SeleniumSearchError('Stop Scraping, seems we are blocked')
             except Exception as e:
                 logger.error('Scrape Exception pass. Selector: ' + str(selector))
-                logger.error('Got this error: ' + str(e))
+                logger.error('Error: ' + str(e))
                 self._save_debug_screenshot()
                 pass
-
-        elif self.search_type == 'image':
-            self.wait_until_title_contains_keyword()
 
         else:
             self.wait_until_title_contains_keyword()
