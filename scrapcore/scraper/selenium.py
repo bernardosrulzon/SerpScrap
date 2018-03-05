@@ -592,7 +592,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
                 selector = '#paging .pgcsel .pg'
 
             try:
-                WebDriverWait(self.webdriver, 5).until(EC.visibility_of_element_located(selector))
+                WebDriverWait(self.webdriver, 5).until(EC.visibility_of_element_located((By.CSS_SELECTOR, selector)))
             except NoSuchElementException:
                 logger.error('No such element. Seeing if title matches before raising SeleniumSearchError')
                 self._save_debug_screenshot()
