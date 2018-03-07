@@ -638,7 +638,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
                 if self.config.get('sel_browser') != 'chrome' or (self.config.get('sel_browser') == 'chrome' and self.config.get('chrome_headless') is False):
                     self.search_input.clear()
             except Exception as e:
-                logger.error('Possible blocked search, sleep 30 sec, Scrape Exception: ' + str(e))7
+                logger.error('Possible blocked search, sleep 30 sec, Scrape Exception: ' + str(e))
                 logger.error('berne: ooops! showing the html!')
                 logger.error(self.webdriver.page_source)
                 logger.error('berne: ooops! showing the text!')
