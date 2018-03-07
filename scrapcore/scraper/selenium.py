@@ -631,6 +631,10 @@ class SelScrape(SearchEngineScrape, threading.Thread):
 
         if self.search_input is False:
             # @todo: pass status_code
+            logger.error('berne: ooops! showing the html!')
+            logger.error(self.webdriver.page_source)
+            logger.error('berne: ooops! showing the text!')
+            logger.error(self.webdriver.find_element_by_tag_name('html').text)
             self.search_input = self.handle_request_denied()
 
         if self.search_input:
