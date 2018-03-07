@@ -455,7 +455,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
         else:
             return {}
 
-    def _wait_until_search_input_field_appears(self, max_wait=10):
+    def _wait_until_search_input_field_appears(self, max_wait=5):
         """Waits until the search input field can be located for the current search engine
 
         Args:
@@ -465,13 +465,25 @@ class SelScrape(SearchEngineScrape, threading.Thread):
                 or the handle to the search input field.
         """
 
+        def detect_captcha(driver):
+            try:
+                element = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.ID, 'recaptcha')))
+                return True
+            except TimeoutException as e:
+                # This is the expected behavior
+                return False
+
         def find_visible_search_input(driver):
             input_field = driver.find_element(*self._get_search_input_field())
             return input_field
 
         try:
             search_input = WebDriverWait(self.webdriver, max_wait).until(find_visible_search_input)
-            return search_input
+            if search_input.get_attribute('type') == 'hidden' and detect_captcha(driver):
+                self.quit()
+                raise SeleniumSearchError('Captcha found! Stop Scraping...')
+            else:
+                return search_input
         except TimeoutException as e:
             logger.error('{}: TimeoutException waiting for search input field: {}'.format(self.name, e))
             return False
@@ -639,10 +651,6 @@ class SelScrape(SearchEngineScrape, threading.Thread):
                     self.search_input.clear()
             except Exception as e:
                 logger.error('Possible blocked search, sleep 30 sec, Scrape Exception: ' + str(e))
-                logger.error('berne: ooops! showing the html!')
-                logger.error(self.webdriver.page_source)
-                logger.error('berne: ooops! showing the text!')
-                logger.error(self.webdriver.find_element_by_tag_name('html').text)
                 self._save_debug_screenshot()
                 time.sleep(30)
             time.sleep(.25)
