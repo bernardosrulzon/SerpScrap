@@ -631,10 +631,6 @@ class SelScrape(SearchEngineScrape, threading.Thread):
 
         if self.search_input is False:
             # @todo: pass status_code
-            logger.error('berne: ooops! showing the html!')
-            logger.error(self.webdriver.page_source)
-            logger.error('berne: ooops! showing the text!')
-            logger.error(self.webdriver.find_element_by_tag_name('html').text)
             self.search_input = self.handle_request_denied()
 
         if self.search_input:
@@ -642,7 +638,11 @@ class SelScrape(SearchEngineScrape, threading.Thread):
                 if self.config.get('sel_browser') != 'chrome' or (self.config.get('sel_browser') == 'chrome' and self.config.get('chrome_headless') is False):
                     self.search_input.clear()
             except Exception as e:
-                logger.error('Possible blocked search, sleep 30 sec, Scrape Exception: ' + str(e))
+                logger.error('Possible blocked search, sleep 30 sec, Scrape Exception: ' + str(e))7
+                logger.error('berne: ooops! showing the html!')
+                logger.error(self.webdriver.page_source)
+                logger.error('berne: ooops! showing the text!')
+                logger.error(self.webdriver.find_element_by_tag_name('html').text)
                 self._save_debug_screenshot()
                 time.sleep(30)
             time.sleep(.25)
