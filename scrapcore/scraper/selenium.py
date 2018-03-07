@@ -465,9 +465,9 @@ class SelScrape(SearchEngineScrape, threading.Thread):
                 or the handle to the search input field.
         """
 
-        def detect_captcha(driver):
+        def detect_captcha():
             try:
-                element = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.ID, 'recaptcha')))
+                element = WebDriverWait(self.webdriver, 5).until(EC.presence_of_element_located((By.ID, 'recaptcha')))
                 return True
             except TimeoutException as e:
                 # This is the expected behavior
@@ -479,7 +479,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
 
         try:
             search_input = WebDriverWait(self.webdriver, max_wait).until(find_visible_search_input)
-            if search_input.get_attribute('type') == 'hidden' and detect_captcha(driver):
+            if search_input.get_attribute('type') == 'hidden' and detect_captcha():
                 self.quit()
                 raise SeleniumSearchError('Captcha found! Stop Scraping...')
             else:
