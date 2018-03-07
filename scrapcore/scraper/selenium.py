@@ -480,6 +480,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
         try:
             search_input = WebDriverWait(self.webdriver, max_wait).until(find_visible_search_input)
             if search_input.get_attribute('type') == 'hidden' and detect_captcha():
+                self._save_debug_screenshot()
                 self.quit()
                 raise SeleniumSearchError('Captcha found! Stop Scraping...')
             else:
@@ -606,13 +607,13 @@ class SelScrape(SearchEngineScrape, threading.Thread):
             try:
                 WebDriverWait(self.webdriver, 5).until(EC.visibility_of_element_located((By.CSS_SELECTOR, selector)))
             except NoSuchElementException:
-                logger.error('No such element. Seeing if title matches before raising SeleniumSearchError')
-                self._save_debug_screenshot()
+                logger.error('No results found. Seeing if title matches')
                 try:
                     self.wait_until_title_contains_keyword()
                 except TimeoutException:
+                    self._save_debug_screenshot()
                     self.quit()
-                    raise SeleniumSearchError('Stop Scraping, seems we are blocked')
+                    raise SeleniumSearchError('Title does not match. Stop Scraping')
             except Exception as e:
                 logger.error('Scrape Exception pass. Selector: ' + str(selector))
                 logger.error('Error: ' + str(e))
