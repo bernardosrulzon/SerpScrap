@@ -479,7 +479,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
 
         try:
             search_input = WebDriverWait(self.webdriver, max_wait).until(find_visible_search_input)
-            if search_input.get_attribute('type') == 'hidden' and detect_captcha():
+            if self.search_engine_name == 'google' and search_input.get_attribute('type') == 'hidden' and detect_captcha():
                 self._save_debug_screenshot()
                 self.quit()
                 raise SeleniumSearchError('Captcha found! Stop Scraping...')
@@ -635,6 +635,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
         Fills out the search form of the search engine for the keyword.
         Clicks the next link while pages_per_keyword is not reached.
         """
+        logger.info('Processing keyword: {}'.format(self.query))
         self.search_input = self._wait_until_search_input_field_appears()
         time.sleep(.25)
 

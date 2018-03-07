@@ -218,7 +218,7 @@ class SearchEngineScrape(metaclass=abc.ABCMeta):
     def keyword_info(self):
         """Print a short summary"""
         logger.info('''
-            {thread_name} {ip} - Keyword: "{keyword}" with {num_pages} pages,
+            {thread_name} {ip} - Processed! Keyword: "{keyword}" with {num_pages} pages,
             slept {delay} seconds before scraping. {done}/{all} already scraped
             '''.format(
                     thread_name=self.name,
