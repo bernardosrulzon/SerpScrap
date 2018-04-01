@@ -133,8 +133,6 @@ class SelScrape(SearchEngineScrape, threading.Thread):
         self.captcha_lock = captcha_lock
         self.scrape_method = 'selenium'
 
-        self.xvfb_display = self.config.get('xvfb_display', None)
-
         self.search_param_values = self._get_search_param_values()
 
         # get the base search url based on the search engine.
@@ -217,11 +215,6 @@ class SelScrape(SearchEngineScrape, threading.Thread):
         except Exception as err:
             logger.error(err)
 
-    def _set_xvfb_display(self):
-        # TODO: should we check the format of the config?
-        if self.xvfb_display:
-            os.environ['DISPLAY'] = self.xvfb_display
-
     def _get_webdriver(self):
         """Return a webdriver instance and set it up
         with the according profile/ proxies.
@@ -239,18 +232,13 @@ class SelScrape(SearchEngineScrape, threading.Thread):
 
         return False
 
-    def _enable_download_in_headless_chrome(self, browser, download_dir):
-        #add missing support for chrome "send_command"  to selenium webdriver
-        browser.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
-    
-        params = {'cmd': 'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': download_dir}}
-        browser.execute("send_command", params)
-
     def _get_Chrome(self):
+        if self.config['remote_webdriver_url'] == '':
+            logger.error('Please provide a valid webdriver remote URL!')
+            raise Exception('Invalid Chrome remote webdriver URL')
         try:
             chrome_ops = webdriver.ChromeOptions()
             if self.proxy:
-                chrome_ops = webdriver.ChromeOptions()
                 chrome_ops.add_argument(
                     '--proxy-server={}://{}:{}'.format(
                         self.proxy.proto,
@@ -258,13 +246,10 @@ class SelScrape(SearchEngineScrape, threading.Thread):
                         self.proxy.port
                     )
                 )
-                self.webdriver = webdriver.Chrome(
-                    executable_path=self.config['executable_path'],
-                    chrome_options=chrome_ops
-                )
 
             if self.config.get('chrome_headless') is True:
                 chrome_ops.add_argument('--headless')
+
             chrome_ops.add_argument('--no-sandbox')
             chrome_ops.add_argument('--start-maximized')
             chrome_ops.add_argument('--disable-gpu')
@@ -277,13 +262,13 @@ class SelScrape(SearchEngineScrape, threading.Thread):
             )
             chrome_ops.add_argument(
                 '--window-size={},{}'.format(
-                    randint(800, 1024),
-                    randint(600, 900)
+                    randint(800, 1366),
+                    randint(600, 768)
                 )
             )
             self.webdriver = webdriver.Chrome(
-                executable_path=self.config['executable_path'],
-                chrome_options=chrome_ops
+                command_executor=self.config['remote_webdriver_url'],
+                desired_capabilities=chrome_ops.to_capabilities()
             )
             return True
         except WebDriverException as e:

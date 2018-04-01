@@ -26,6 +26,7 @@ class Config():
         'sel_browser': 'phantomjs',
         'chrome_headless': True,
         'executable_path': '',
+        'remote_webdriver_url': '',
         'do_caching': True,
         'cachedir': '/tmp/.serpscrap/',
         'screenshot': True,
