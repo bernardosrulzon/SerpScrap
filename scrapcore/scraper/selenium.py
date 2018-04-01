@@ -455,6 +455,14 @@ class SelScrape(SearchEngineScrape, threading.Thread):
         else:
             return {}
 
+    def _detect_captcha(self):
+            try:
+                element = WebDriverWait(self.webdriver, 5).until(EC.presence_of_element_located((By.ID, 'recaptcha')))
+                return True
+            except TimeoutException as e:
+                # This is the expected behavior
+                return False
+
     def _wait_until_search_input_field_appears(self, max_wait=5):
         """Waits until the search input field can be located for the current search engine
 
@@ -465,26 +473,13 @@ class SelScrape(SearchEngineScrape, threading.Thread):
                 or the handle to the search input field.
         """
 
-        def detect_captcha():
-            try:
-                element = WebDriverWait(self.webdriver, 5).until(EC.presence_of_element_located((By.ID, 'recaptcha')))
-                return True
-            except TimeoutException as e:
-                # This is the expected behavior
-                return False
-
         def find_visible_search_input(driver):
             input_field = driver.find_element(*self._get_search_input_field())
             return input_field
 
         try:
             search_input = WebDriverWait(self.webdriver, max_wait).until(find_visible_search_input)
-            self._save_debug_screenshot()
-            logger.info('-----PRINTING SOURCE------')
-            logger.info(self.webdriver.page_source)
-            logger.info('-----FINISHED PRINTING SOURCE------')
-            logger.info(detect_captcha())
-            if self.search_engine_name == 'google' and search_input.get_attribute('type') == 'hidden' and detect_captcha():
+            if self.search_engine_name == 'google' and search_input.get_attribute('type') == 'hidden' and _detect_captcha():
                 self._save_debug_screenshot()
                 self.quit()
                 raise SeleniumSearchError('Captcha found! Stop Scraping...')
@@ -621,11 +616,15 @@ class SelScrape(SearchEngineScrape, threading.Thread):
                     self.quit()
                     raise SeleniumSearchError('Title does not match. Stop Scraping')
             except Exception as e:
-                logger.error('Scrape Exception pass. Selector: ' + str(selector))
-                logger.error('Error: ' + str(e))
-                self._save_debug_screenshot()
-                logger.error(self.webdriver.page_source)
-                pass
+                if _detect_captcha():
+                    self._save_debug_screenshot()
+                    self.quit()
+                    raise SeleniumSearchError('Captcha found! Stop Scraping...')
+                else:
+                    logger.error('Scrape Exception pass. Selector: ' + str(selector))
+                    logger.error('Error: ' + str(e))
+                    self._save_debug_screenshot()
+                    pass
 
         else:
             self.wait_until_title_contains_keyword()
