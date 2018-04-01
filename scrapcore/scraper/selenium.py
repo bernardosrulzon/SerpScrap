@@ -481,12 +481,12 @@ class SelScrape(SearchEngineScrape, threading.Thread):
             search_input = WebDriverWait(self.webdriver, max_wait).until(find_visible_search_input)
             if self.search_engine_name == 'google' and search_input.get_attribute('type') == 'hidden' and detect_captcha():
                 self._save_debug_screenshot()
+                print(self.webdriver.page_source)
                 self.quit()
                 raise SeleniumSearchError('Captcha found! Stop Scraping...')
             else:
                 return search_input
         except TimeoutException as e:
-            print(self.webdriver.page_source)
             self._save_debug_screenshot()
             logger.error('{}: TimeoutException waiting for search input field: {}'.format(self.name, e))
             return False
