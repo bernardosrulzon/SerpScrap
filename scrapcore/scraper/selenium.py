@@ -482,6 +482,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
             print(self.webdriver.page_source)
             print(search_input.get_attribute('type') == 'hidden')
             print(detect_captcha())
+            self._save_debug_screenshot()
             if self.search_engine_name == 'google' and search_input.get_attribute('type') == 'hidden' and detect_captcha():
                 self._save_debug_screenshot()
                 self.quit()
