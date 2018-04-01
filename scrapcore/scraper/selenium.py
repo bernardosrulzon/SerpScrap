@@ -619,6 +619,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
                 logger.error('Scrape Exception pass. Selector: ' + str(selector))
                 logger.error('Error: ' + str(e))
                 self._save_debug_screenshot()
+                logger.error(self.webdriver.page_source)
                 pass
 
         else:
