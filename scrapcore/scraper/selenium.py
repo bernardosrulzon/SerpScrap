@@ -747,7 +747,6 @@ class SelScrape(SearchEngineScrape, threading.Thread):
         for self.query, self.pages_per_keyword in self.jobs.items():
             # for each keyword request a fresh webdriver instance
             # with random useragent and window_size
-            self._set_xvfb_display()
 
             if not self._get_webdriver():
                 raise Exception('{}: Aborting due to no available selenium webdriver.'.format(self.name))
