@@ -76,7 +76,7 @@ class SerpScrap():
         else:
             self.config = Config().get()
 
-        if self.config['executable_path'] == '':
+        if self.config['sel_browser'] == 'phantomjs' and self.config['executable_path'] == '':
             logger.info('preparing phantomjs')
             firstrun = PhantomInstall()
             phantomjs = firstrun.detect_phantomjs()
