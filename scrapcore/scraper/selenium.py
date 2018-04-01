@@ -486,6 +486,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
             else:
                 return search_input
         except TimeoutException as e:
+            self._save_debug_screenshot()
             logger.error('{}: TimeoutException waiting for search input field: {}'.format(self.name, e))
             return False
 
