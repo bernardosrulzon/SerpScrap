@@ -479,7 +479,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
 
         try:
             search_input = WebDriverWait(self.webdriver, max_wait).until(find_visible_search_input)
-            if self.search_engine_name == 'google' and search_input.get_attribute('type') == 'hidden' and _detect_captcha():
+            if self.search_engine_name == 'google' and search_input.get_attribute('type') == 'hidden' and self._detect_captcha():
                 self._save_debug_screenshot()
                 self.quit()
                 raise SeleniumSearchError('Captcha found! Stop Scraping...')
@@ -616,7 +616,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
                     self.quit()
                     raise SeleniumSearchError('Title does not match. Stop Scraping')
             except Exception as e:
-                if _detect_captcha():
+                if self._detect_captcha():
                     self._save_debug_screenshot()
                     self.quit()
                     raise SeleniumSearchError('Captcha found! Stop Scraping...')
