@@ -341,7 +341,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
 
     def _get_PhantomJS(self):
         try:
-            service_args = []
+            service_args = ['--ignore-ssl-errors=true', '--ssl-protocol=any']
 
             if self.proxy:
                 service_args.extend([
