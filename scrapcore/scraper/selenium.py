@@ -212,6 +212,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
         )
 
         try:
+            logger.info('Getting screenshot')
             self.webdriver.save_screenshot(location)
         except Exception as err:
             logger.error(err)
