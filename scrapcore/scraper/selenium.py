@@ -266,7 +266,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
                     randint(600, 768)
                 )
             )
-            self.webdriver = webdriver.Chrome(
+            self.webdriver = webdriver.Remote(
                 command_executor=self.config['remote_webdriver_url'],
                 desired_capabilities=chrome_ops.to_capabilities()
             )
