@@ -90,7 +90,7 @@ class SerpScrap():
                         provide custom path in config''')
             self.config.__setitem__('executable_path', phantomjs)
             logger.info('using ' + str(phantomjs))
-        elif self.config['executable_path'] == '' and self.config['sel_browser'] == 'chrome':
+        elif self.config['executable_path'] == '' and self.config['sel_browser'] == 'chrome' and self.config['remote_webdriver_url'] == '':
             logger.info('preparing chromedriver')
             firstrun = ChromeInstall()
             chromedriver = firstrun.detect_chromedriver()
