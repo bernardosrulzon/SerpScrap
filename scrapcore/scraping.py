@@ -227,7 +227,7 @@ class SearchEngineScrape(metaclass=abc.ABCMeta):
                     num_pages=self.pages_per_keyword,
                     delay=self.current_delay,
                     done=self.search_number,
-                    all=self.num_keywords
+                    all=self.num_keywords * self.pages_per_keyword
                     ))
 
     def instance_creation_info(self, scraper_name):
