@@ -23,9 +23,8 @@ def get_related(config, keywords, related):
 
 config = serpscrap.Config()
 config.set('scrape_urls', False)
-config.set('num_workers', 1)
 
-keywords = ['cryptocurrency']
+keywords = ['stellar']
 
 related = keywords
 related = get_related(config, keywords, related)

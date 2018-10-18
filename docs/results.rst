@@ -10,7 +10,7 @@ If you prefer to save the results use the as_csv() method.
 
    {
     'query': 'example',
-    'query_num_results total': 'Ungefähr 1.740.000.000 Ergebnisse (0,50 '
+    'query_num_results_total': 'Ungefähr 1.740.000.000 Ergebnisse (0,50 '
                                'Sekunden)\xa0',
     'query_num_results_page': 10,
     'query_page_number': 1,
@@ -25,6 +25,21 @@ If you prefer to save the results use the as_csv() method.
     'serp_url': 'http://dictionary.cambridge.org/de/worterbuch/englisch/example',
     'serp_visible_link': 'dictionary.cambridge.org/de/worterbuch/englisch/example',
     'screenshot': '/tmp/screenshots/2017-05-21/google_example-p1.png'
+   }
+
+
+If scrape_urls is True additional fields are appended to the resultset
+
+.. code-block:: python
+
+   {
+    'meta_robots': 'index, follow', # value of meta tag robots
+    'meta_title': 'Title of the page', # title of the url
+    'status': '200', # response code
+    'url': 'https://de.wikipedia.org', # scraped url
+    'encoding': 'utf-8', # encoding of the url
+    'last_modified': '26.08.2018  11:35:40', # datetime url lastmodified
+    'text_raw': 'The raw text content scraped from url'
    }
 
 

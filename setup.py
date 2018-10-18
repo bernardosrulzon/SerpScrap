@@ -2,17 +2,17 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
 
-version = '0.10.1'
+version = '0.12.0'
 
 
 setup(
     name='SerpScrap',
     version=version,
     description='''
-    A python scraper to extract and analyze data from
-    search engine result pages and urls.
-    Extract data, like url, title, snippet
-    of results or ratings for given keywords.
+    SEO python scraper to extract data from major searchengine result pages.
+    Extract data like url, title, snippet, richsnippet and the type from searchresults for given keywords. Detect Ads or make automated screenshots.
+    You can also fetch text content of urls provided in searchresults or by your own.
+    It's usefull for SEO and business related research tasks.
     ''',
     long_description=open('README.rst').read(),
     author='Ronald Schmidt',
@@ -22,15 +22,16 @@ setup(
     license='MIT',
     packages=find_packages(),
     install_requires=[
-        'PySocks==1.6.7',
+        'PySocks==1.6.8',
         'chardet==3.0.4',
-        'beautifulsoup4==4.6.0',
-        'html2text==2017.10.4',
-        'lxml==3.8.0',
-        'sqlalchemy==1.1.15',
-        'selenium==3.11.0',
-        'cssselect==1.0.1',
+        'beautifulsoup4==4.6.3',
+        'html2text==2018.1.9',
+        'lxml==4.2.3',
+        'sqlalchemy==1.2.10',
+        'selenium==3.14.1',
+        'cssselect==1.0.3',
     ],
+    scripts=['install_chrome.sh'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',

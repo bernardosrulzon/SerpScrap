@@ -192,6 +192,10 @@ class SelScrape(SearchEngineScrape, threading.Thread):
         Saves a debug screenshot of the browser window to figure
         out what went wrong.
         """
+#         if self.config.get('sel_browser') == 'chrome' and self.config.get('chrome_headless') is True:
+#             """screenshots in headless chrome does not work at the moment"""
+#             logger.info('no screenshot for chrome headless possible, may be working in the future')
+#             return
 
         screendir = '{}/{}'.format(
             self.config['dir_screenshot'],
@@ -208,6 +212,11 @@ class SelScrape(SearchEngineScrape, threading.Thread):
                 str(self.page_number),
             )
         )
+
+        if self.config.get('sel_browser') == 'chrome' and self.config.get('chrome_headless') is True:
+            self._enable_download_in_headless_chrome(self.webdriver, screendir)
+            total_height = self.webdriver.execute_script("return document.body.parentNode.scrollHeight")
+            self.webdriver.set_window_size('1024', total_height)
 
         try:
             logger.info('Getting screenshot')
@@ -409,6 +418,12 @@ class SelScrape(SearchEngineScrape, threading.Thread):
             starting_point = self.image_search_locations[self.search_engine_name]
         else:
             starting_point = self.base_search_url
+            # logger.info('results_age: ' + self.config.get('results_age'))
+            if self.config.get('num_results_per_page', 10) > 10:
+                starting_point = '{}num={}'.format(starting_point, str(self.config.get('num_results_per_page', 10)))
+            if 'Any' not in self.config.get('results_age'):
+                starting_point = '{}&tbs=qdr:={}'.format(starting_point, str(self.config.get('results_age', 'y')))
+            logger.info(starting_point)
 
         self.webdriver.get(starting_point)
 

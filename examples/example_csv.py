@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import serpscrap
 
-keywords = ['seo tools', 'seo news']
+keywords = ['stellar']
 
 config = serpscrap.Config()
 config.set('scrape_urls', False)
