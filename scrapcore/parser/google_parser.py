@@ -33,7 +33,7 @@ class GoogleParser(Parser):
                 'result_container': 'div.g',
                 'link': 'div.r > a:first-of-type::attr(href)',
                 'snippet': 'div.s span.st::text',
-                'title': 'div.r > a:first-of-type::text',
+                'title': 'div.r > a:first-of-type > h3::text',
                 'visible_link': 'cite::text',
                 'rating': 'div.f.slp::text',
                 'sitelinks': 'div.osl::text'
